@@ -37,23 +37,23 @@ def retrieve_documents(query):
 
 # Test retrieval
 
-query = "What is RAG?"
+# query = "What is RAG?"
 
-results = retrieve_documents(query)
+# results = retrieve_documents(query)
 
-print("\nQuery:", query)
+# print("\nQuery:", query)
 
-print("\nRetrieved Documents:")
+# print("\nRetrieved Documents:")
 
-for document, metadata, distance in zip(
-    results["documents"][0],
-    results["metadatas"][0],
-    results["distances"][0]
-):
-    print("\nDocument:")
-    print(document)
+# for document, metadata, distance in zip(
+#     results["documents"][0],
+#     results["metadatas"][0],
+#     results["distances"][0]
+# ):
+#     print("\nDocument:")
+#     print(document)
 
-    print("\nMetadata:")
-    print(metadata)
+#     print("\nMetadata:")
+#     print(metadata)
 
-    print("Distance:", distance)
+#     print("Distance:", distance)
