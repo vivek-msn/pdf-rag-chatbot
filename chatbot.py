@@ -32,26 +32,34 @@ def ask_question(query):
 
 # Test the complete RAG pipeline
 
-query = "What is RAG?"
+# query = "What is RAG?"
+# Interactive chatbot
 
-answer, metadatas = ask_question(query)
+while True:
 
-print("\nQuestion:")
-print(query)
+    query = input("\nYou: ")
 
-print("\nAnswer:")
-print(answer)
+    if query.lower() == "exit":
+        print("GoodBye!")
+        break
 
-print("\nSources:")
+    answer, metadatas = ask_question(query)
 
-seen_sources = set()
+    print("\nBot:")
+    print(answer)
 
-for metadata in metadatas:
-    source = metadata["source"]
-    page = metadata["page"]
+    if metadatas:
 
-    source_key = (source, page)
+        print("\nSources:")
 
-    if source_key not in seen_sources:
-        print(f"- {source} (Page {page})")
-        seen_sources.add(source_key)
+        seen_sources = set()
+
+        for metadata in metadatas:
+            source = metadata["source"]
+            page = metadata["page"]
+
+            source_key = (source, page)
+
+            if source_key not in seen_sources:
+                print(f"- {source} (Page {page})")
+                seen_sources.add(source_key)
