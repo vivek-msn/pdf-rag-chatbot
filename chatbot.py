@@ -10,6 +10,12 @@ def ask_question(query):
     # Extract retrieved documents
     documents = results["documents"][0]
 
+    if not documents:
+        return (
+            "I don't know based on the provided document.",
+            []
+        )
+    
     # Extract metadata
     metadatas = results['metadatas'][0]
 
