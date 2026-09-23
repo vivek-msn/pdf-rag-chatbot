@@ -57,3 +57,23 @@ def retrieve_documents(query):
 #     print(metadata)
 
 #     print("Distance:", distance)
+
+
+if __name__ == "__main__":
+
+    results = retrieve_documents("What is RAG?")
+
+    print("\nRetrieved Documents:")
+
+    for document, metadata, distance in zip(
+        results["documents"][0],
+        results["metadatas"][0],
+        results["distances"][0]
+    ):
+        print("\nDocument:")
+        print(document)
+
+        print("\nMetadata:")
+        print(metadata)
+
+        print("Distance:", distance)

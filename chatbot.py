@@ -10,6 +10,9 @@ def ask_question(query):
     # Extract retrieved documents
     documents = results["documents"][0]
 
+    # Extract metadata
+    metadatas = results['metadatas'][0]
+
     # Combine retrieved chunks into one context
     context = "\n\n".join(documents)
 
@@ -19,16 +22,30 @@ def ask_question(query):
         context=context
     )
 
-    return answer
+    return answer, metadatas
 
 # Test the complete RAG pipeline
 
 query = "What is RAG?"
 
-answer = ask_question(query)
+answer, metadatas = ask_question(query)
 
 print("\nQuestion:")
 print(query)
 
 print("\nAnswer:")
 print(answer)
+
+print("\nSources:")
+
+seen_sources = set()
+
+for metadata in metadatas:
+    source = metadata["source"]
+    page = metadata["page"]
+
+    source_key = (source, page)
+
+    if source_key not in seen_sources:
+        print(f"- {source} (Page {page})")
+        seen_sources.add(source_key)

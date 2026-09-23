@@ -16,13 +16,13 @@ reader = PdfReader(PDF_PATH)
 
 print("Number of pages:", len(reader.pages))
 
-full_text = ""
+# full_text = ""
 
-for page_number, page in enumerate(reader.pages, start=1):
-    text = page.extract_text()
+# for page_number, page in enumerate(reader.pages, start=1):
+#     text = page.extract_text()
 
-    if text:
-        full_text += text + "\n"
+#     if text:
+#         full_text += text + "\n"
 
 # print(f"\n--- Full PDF Text ---")
 # print(full_text)
@@ -34,16 +34,37 @@ text_splitter = RecursiveCharacterTextSplitter(
     chunk_overlap=CHUNK_OVERLAP
 )
 
-chunks = text_splitter.split_text(full_text)
+# Generate page-level chunks
 
-print("\nNumber of chunks:", len(chunks))
+all_chunks = []
+all_metadatas = []
+
+for page_number, page in enumerate(reader.pages, start=1):
+
+    text = page.extract_text()
+
+    if not text:
+        continue
+
+    page_chunks = text_splitter.split_text(text)
+
+    for chunk in page_chunks:
+
+        all_chunks.append(chunk)
+
+        all_metadatas.append({
+            "source": PDF_PATH,
+            "page" : page_number
+        })
+
+print("\nNumber of chunks:", len(all_chunks))
 
 
 # Generate Embeddings
 
 model = SentenceTransformer(EMBEDDING_MODEL)
 
-embeddings = model.encode(chunks)
+embeddings = model.encode(all_chunks)
 
 print("\nEmbedding shape:", embeddings.shape)
 
@@ -58,23 +79,24 @@ collection = client.get_or_create_collection(
     name="pdf_documents"
 )
 
+# Clear existing collection
+
+existing_data = collection.get()
+
+if existing_data["ids"]:
+    collection.delete(
+        ids=existing_data["ids"]
+    )
+
 # Store Chunks in ChromaDB
 
-ids = [f"chunk_{i}" for i in range(len(chunks))]
-
-metadatas = [
-    {
-        "source": PDF_PATH,
-        "chunk_index": i
-    }
-    for i in range(len(chunks))
-]
+ids = [f"chunk_{i}" for i in range(len(all_chunks))]
 
 collection.add(
     ids=ids,
-    documents=chunks,
+    documents=all_chunks,
     embeddings=embeddings.tolist(),
-    metadatas=metadatas
+    metadatas=all_metadatas
 )
 
 print("\nTotal documents in chromaDB:", collection.count())
