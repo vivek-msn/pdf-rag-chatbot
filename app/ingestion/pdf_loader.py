@@ -2,12 +2,14 @@ from pypdf import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
 import chromadb
-
-# Configuration
-PDF_PATH ="rag_guide.pdf"
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 100
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+from app.config import (
+    PDF_PATH,
+    CHUNK_SIZE,
+    CHUNK_OVERLAP,
+    EMBEDDING_MODEL,
+    CHROMA_DB_PATH,
+    COLLECTION_NAME
+)
 
 
 # PDF Text Extraction
@@ -72,11 +74,11 @@ print("\nEmbedding shape:", embeddings.shape)
 # ChromaDB
 
 client = chromadb.PersistentClient(
-    path="pdf_chroma_db"
+    path=CHROMA_DB_PATH
     )
 
 collection = client.get_or_create_collection(
-    name="pdf_documents"
+    name=COLLECTION_NAME
 )
 
 # Clear existing collection
