@@ -5,3 +5,5 @@ pypdf
 google-genai==2.20.0
 python-dotenv==1.2.3
 pytest
+fastapi
+uvicorn
