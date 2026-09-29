@@ -43,3 +43,16 @@ body {
     text-align: right;
     color: #222;
 }
+
+.sources-title {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+.source-message {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 5px;
+    padding-left: 10px;
+}
