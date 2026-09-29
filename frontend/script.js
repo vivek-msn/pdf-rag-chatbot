@@ -28,7 +28,7 @@ sendButton.addEventListener("click", function () {
     .then(data => {
         // console.log(data.sources);
         document.getElementById("loading").remove();
-        
+
         messages.innerHTML += "<div class='bot-message'>Bot: " + data.answer +"</div>";
 
         messages.innerHTML +="<div class='sources-title'>Sources</div>";
@@ -41,5 +41,10 @@ sendButton.addEventListener("click", function () {
                 source.page +
                 "</div>";
             });
-        });    
+        })
+        .catch(function () {
+            document.getElementById("loading").remove();
+
+            messages.innerHTML += "<div class='bot-message'>Sorry something went wrong. Please try again.</div>";
+        });
     });
