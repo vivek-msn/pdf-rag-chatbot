@@ -1,23 +1,16 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from app.chatbot import ask_question
 
 app = FastAPI()
+
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 @app.get("/chat")
 def serve_frontend():
     return FileResponse("frontend/index.html")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 class AskRequest(BaseModel):
     question: str = Field(..., min_length=1)
